@@ -1,0 +1,18 @@
+# /etc/crontab: system-wide crontab
+# Unlike any other crontab you don't have to run the `crontab'
+# command to install the new version when you edit this file
+# and files in /etc/cron.d. These files also have username fields,
+# that none of the other crontabs do.
+
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+HOME=/home/francis/Documents/Repos/
+
+--pull the last version of the data model
+00 0	* * *	root	cd dbt_checkout_francisco/; git pull origin master
+--copy the crontab to the computer crontab file
+00 0	* * *	root	cd dbt_checkout_francisco/; cp crontab /etc/crontab
+
+--Run the models
+10 0	* * *	root	cd dbt_checkout_francisco/; dbt run --models tag:daily
+0 *   * * * root	cd dbt_checkout_francisco/; dbt run --models tag:hourly

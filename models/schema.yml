@@ -1,0 +1,66 @@
+version: 2
+
+models:
+  - name: current_postcode
+    description: Current postcode of all the users
+    columns:
+      - name: user_id
+        description: Primary key of users
+        tests:
+          - unique
+          - not_null
+      - name: postcode
+        description: postcode value
+        tests:
+          - not_null
+      - name: postcode_updated_date
+        description: update time of the last postcode used
+        tests:
+          - not_null
+  - name: updated_postcode_stg
+    description: view with the postcodes that have changed since last time. Used to update old postcodes on pageview_postcode
+    columns:
+      - name: user_id
+        description: Primary key of users
+        tests:
+          - not_null
+      - name: pageview_datetime
+        description: timestamp of this pageview
+        tests:
+          - not_null
+      - name: original_postcode
+        description: postcode value when this pageview was made
+        tests:
+          - not_null
+      - name: current_postcode
+        description: current postcode of this user
+        tests:
+          - not_null
+      - name: postcode_updated_date
+        description: update time of this current postcode
+        tests:
+          - not_null
+
+  - name: pageview_postcode
+    description: table with all the pageviews with the current postcode and the postcode that the user had when he/she did the pageview
+    columns:
+      - name: user_id
+        description: Primary key of users
+        tests:
+          - not_null
+      - name: pageview_datetime
+        description: timestamp of this pageview
+        tests:
+          - not_null
+      - name: original_postcode
+        description: postcode value when this pageview was made
+        tests:
+          - not_null
+      - name: current_postcode
+        description: current postcode of this user
+        tests:
+          - not_null
+      - name: postcode_updated_date
+        description: update time of this current postcode
+        tests:
+          - not_null
