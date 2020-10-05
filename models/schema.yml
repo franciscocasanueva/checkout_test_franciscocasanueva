@@ -1,25 +1,34 @@
 version: 2
 
 models:
-  - name: current_postcode
-    description: Current postcode of all the users
+  - name: postcode_log
+    description: Log of all the postcodes of users
     columns:
+      - name: postcode_id
+        description: Unique id of each postcode taking into account the user id and the postcode
+        tests:
+          - unique
+          - not_null
       - name: user_id
         description: Primary key of users
         tests:
-          - unique
           - not_null
       - name: postcode
         description: postcode value
         tests:
           - not_null
       - name: postcode_updated_date
-        description: update time of the last postcode used
+        description: update time of the postcode
         tests:
           - not_null
   - name: updated_postcode_stg
-    description: view with the postcodes that have changed since last time. Used to update old postcodes on pageview_postcode
+    description: table with the postcodes updates. Used to update old postcodes on pageview_postcode
     columns:
+      - name: update_postcode_id
+        description:  Unique id of each postcode taking into account the user id and the pageview_datetime
+        tests:
+          - unique
+          - not_null
       - name: user_id
         description: Primary key of users
         tests:
@@ -44,6 +53,11 @@ models:
   - name: pageview_postcode
     description: table with all the pageviews with the current postcode and the postcode that the user had when he/she did the pageview
     columns:
+      - name: update_postcode_id
+        description:  Unique id of each postcode taking into account the user id and the pageview_datetime
+        tests:
+          - unique
+          - not_null
       - name: user_id
         description: Primary key of users
         tests:

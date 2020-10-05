@@ -34,7 +34,7 @@ Updated: hourly
 
 We want the users to be able to query these 2 requirements with only one table, and if possible without any joins in order to achieve the best performance possible for the analytics that will be run. I achieved this with the final data model ___pageviews_postcode___:
 
-| user_id  | pageview_datetime  | original_postcode  | current_postcode  | postcode_updated_date  |
+| user_id  | pageview_datetime  | original_postcode  | postcode_log  | postcode_updated_date  |
 |---|---|---|---|---|
 | 1234  |  2019-10-11 14:55:23 | SW19  |  SW20 |  2019-10-20 00:00:03 |
 
@@ -42,24 +42,19 @@ We want the users to be able to query these 2 requirements with only one table, 
 
 We want to prevent daily loading the whole ***pageview_extract*** as it has 100M daily rows. In order to do this we use a incremental table on the final table of ___pageviews_postcode___ this incremental has 2 parts:
 
-1. Load the new entries of ***pageview_extract*** into ___pageview_postcode___ using their last postcode from ___current_postcode___.
+1. Load the new entries of ***pageview_extract*** into ___pageview_postcode___ using their last postcode from ___postcode_log___.
 2. Update the postcodes that have changed since the last run of ___pageviews_postcode___. To do this we create a view with all the postcodes that have changed and need to be updated called ___updated_postcode_stg___.
 
 
 ***Scheduling strategy***:
 
 In order to showcase the scheduling of the model I have implemented a 2 cronjobs that will update the tables:
-  - ___current_postcode___ and ___updated_postcode_stg___ daily
+  - ___postcode_log___ and ___updated_postcode_stg___ daily
   - ___pageviews_postcode___ hourly
 
 The crontab file can be found on this repo. In order to use it on a different server the HOME variable on that file should be replaced with the path where this repo is saved. This crontab:
 - Automatically pulls any changes of the repo every morning.
 - Copies the crontab file from the repo to the linux crontab file every morning (this is not sustainable with more jobs, you would have to just create one version control file of the crontab).
 - Executes the hourly and daily dbt runs.
-
-In order to initiallize the model you will have to first run the models manually in the following order:
-___current_postcode___
-___pageviews_postcode___
-___updated_postcode_stg___
 
 This could be done in a much more sustainable way using a workflow scheduler like AirFlow.
