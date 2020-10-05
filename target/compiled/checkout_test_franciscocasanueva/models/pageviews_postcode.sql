@@ -10,7 +10,7 @@ select
     string
 ), '')) as 
     string
-))) as uniquekey,
+))) as update_postcode_id,
   pageviews.user_id,
   pageviews.pageview_datetime,
   USR.postcode as original_postcode,
@@ -36,7 +36,7 @@ join `dbt-test-290911`.`dbt_francisco`.`postcode_log` as USR on USR.user_id = pa
     string
 ), '')) as 
     string
-))) as uniquekey,
+))) as update_postcode_id,
     updated.user_id,
     updated.pageview_datetime,
     updated.original_postcode,
