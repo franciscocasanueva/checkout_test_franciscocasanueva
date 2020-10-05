@@ -18,7 +18,7 @@ select
   USR.postcode as current_postcode,
   USR.postcode_updated_date
 
-from dbt_francisco.pageviews_extract as pageviews
+from pageviews_extract as pageviews
 join {{ref('postcode_log')}} as USR on USR.user_id = pageviews.user_id
 
 {% if is_incremental() %}

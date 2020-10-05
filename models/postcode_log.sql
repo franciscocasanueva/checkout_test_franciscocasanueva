@@ -12,7 +12,7 @@ select
   users_extract.postcode,
   CURRENT_TIMESTAMP() as postcode_updated_date
 from
-  dbt_francisco.users_extract
+  users_extract
 
   {% if is_incremental() %}
 

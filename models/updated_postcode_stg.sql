@@ -26,7 +26,7 @@ select
   current_postcode.postcode_updated_date
 from
   {{ref ('postcode_log')}} as postcode_log
-  join dbt_francisco.pageviews_extract as pageviews on postcode_log.user_id = pageviews.user_id
+  join pageviews_extract as pageviews on postcode_log.user_id = pageviews.user_id
   join current_postcode on current_postcode.user_id = postcode_log.user_id
 
 where
